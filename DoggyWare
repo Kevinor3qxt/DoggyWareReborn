@@ -1,0 +1,806 @@
+if game.PlaceId == 5602055394 then 
+
+
+local Atlas = loadstring(game:HttpGet("https://siegehub.net/Atlas.lua"))()
+
+local UI = Atlas.new({
+    Name = "Doggyware Reborn"; -- script name (required)
+    ConfigFolder = "DW"; -- folder name to save configs to, set this to nil if you want to disable configs saving
+    Credit = "Made By 3qxt#9919"; -- text to appear if player presses the "i" button on their UI (optional)
+    Color = Color3.fromRGB(225,186,239); -- theme color for UI (required)
+    Bind = "V"; -- keybind for toggling the UI, must be a valid KeyCode name
+    -- Atlas Loader:
+    UseLoader = true; -- whether to use Atlas Loader or not, if set to false than CheckKey and Discord are ignored
+    FullName = "Doggyware Reborn"; -- works if UseLoader is set to true, can be same as Name argument, shown on loader frame
+    CheckKey = function(inputtedKey) -- works if UseLoader is set to true, where inputtedKey is the key inputted by the player
+        return inputtedKey=="DoggyCracked"
+    end;
+    Discord = ""; -- works if UseLoader is set to true, will be copied to clipboard if player presses "Copy Invite" button
+})
+UI:Notify({
+  Title = "Checking for whitelist";
+  Content = "Almost there";
+})
+UI:Notify({
+  Title = "Whitelisted";
+  Content = "Welcome, Thanks for buying!";
+})
+local MyPage1 = UI:CreatePage("Main") -- creates a page
+local MySection1 = MyPage1:CreateSection("Main Stuff")
+
+MySection1:CreateButton({
+    Name = "Fly (x)"; -- required: name of element
+    Callback = function() -- required: function to be called when button is pressed
+        local plr = game.Players.LocalPlayer
+local mouse = plr:GetMouse()
+
+localplayer = plr
+
+if workspace:FindFirstChild("Core") then
+workspace.Core:Destroy()
+end
+
+local Core = Instance.new("Part")
+Core.Name = "Core"
+Core.Size = Vector3.new(0.05, 0.05, 0.05)
+
+spawn(function()
+Core.Parent = workspace
+local Weld = Instance.new("Weld", Core)
+Weld.Part0 = Core
+Weld.Part1 = localplayer.Character.LowerTorso
+Weld.C0 = CFrame.new(0, 0, 0)
+end)
+
+workspace:WaitForChild("Core")
+
+local torso = workspace.Core
+flying = true
+local speed=10
+local keys={a=false,d=false,w=false,s=false}
+local e1
+local e2
+local function start()
+local pos = Instance.new("BodyPosition",torso)
+local gyro = Instance.new("BodyGyro",torso)
+pos.Name="EPIXPOS"
+pos.maxForce = Vector3.new(math.huge, math.huge, math.huge)
+pos.position = torso.Position
+gyro.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+gyro.cframe = torso.CFrame
+repeat
+wait()
+localplayer.Character.Humanoid.PlatformStand=true
+local new=gyro.cframe - gyro.cframe.p + pos.position
+if not keys.w and not keys.s and not keys.a and not keys.d then
+speed=5
+end
+if keys.w then
+new = new + workspace.CurrentCamera.CoordinateFrame.lookVector * speed
+speed=speed+0
+end
+if keys.s then
+new = new - workspace.CurrentCamera.CoordinateFrame.lookVector * speed
+speed=speed+0
+end
+if keys.d then
+new = new * CFrame.new(speed,0,0)
+speed=speed+0
+end
+if keys.a then
+new = new * CFrame.new(-speed,0,0)
+speed=speed+0
+end
+if speed>10 then
+speed=5
+end
+pos.position=new.p
+if keys.w then
+gyro.cframe = workspace.CurrentCamera.CoordinateFrame*CFrame.Angles(-math.rad(speed*0),0,0)
+elseif keys.s then
+gyro.cframe = workspace.CurrentCamera.CoordinateFrame*CFrame.Angles(math.rad(speed*0),0,0)
+else
+gyro.cframe = workspace.CurrentCamera.CoordinateFrame
+end
+until flying == false
+if gyro then gyro:Destroy() end
+if pos then pos:Destroy() end
+flying=false
+localplayer.Character.Humanoid.PlatformStand=false
+speed=10
+end
+e1=mouse.KeyDown:connect(function(key)
+if not torso or not torso.Parent then flying=false e1:disconnect() e2:disconnect() return end
+if key=="w" then
+keys.w=true
+elseif key=="s" then
+keys.s=true
+elseif key=="a" then
+keys.a=true
+elseif key=="d" then
+keys.d=true
+elseif key=="x" then
+if flying==true then
+flying=false
+else
+flying=true
+start()
+end
+end
+end)
+e2=mouse.KeyUp:connect(function(key)
+if key=="w" then
+keys.w=false
+elseif key=="s" then
+keys.s=false
+elseif key=="a" then
+keys.a=false
+elseif key=="d" then
+keys.d=false
+end
+end)
+start()
+    end
+})
+MySection1:CreateButton({
+    Name = "Resolver (Resolves mostly everything)"; -- required: name of element
+    Callback = function() -- required: function to be called when button is pressed
+        local RunService = game:GetService("RunService")
+
+local function zeroOutYVelocity(hrp)
+    hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
+    hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
+end
+
+local function onPlayerAdded(player)
+    player.CharacterAdded:Connect(function(character)
+        local hrp = character:WaitForChild("HumanoidRootPart")
+        zeroOutYVelocity(hrp)
+    end)
+end
+
+local function onPlayerRemoving(player)
+    player.CharacterAdded:Disconnect()
+end
+
+game.Players.PlayerAdded:Connect(onPlayerAdded)
+game.Players.PlayerRemoving:Connect(onPlayerRemoving)
+
+RunService.Heartbeat:Connect(function()
+    pcall(function()
+        for i, player in pairs(game.Players:GetChildren()) do
+            if player.Name ~= game.Players.LocalPlayer.Name then
+                local hrp = player.Character.HumanoidRootPart
+                zeroOutYVelocity(hrp)
+            end
+        end
+    end)
+end)
+    end
+})
+MySection1:CreateButton({
+    Name = "Hood modded Lock (q)"; -- required: name of element
+    Callback = function() -- required: function to be called when button is pressed
+             		 local Settings = { AimLock = { Enabled = true, Aimlockkey = "q", Prediction = 0.130340, Aimpart = 'HumanoidRootPart', Notifications = true }, Settings = { Thickness = 3.5, Transparency = 1, Color = Color3.fromRGB(106, 13, 173), FOV = true } } local CurrentCamera = game:GetService("Workspace").CurrentCamera local Inset = game:GetService("GuiService"):GetGuiInset().Y local RunService = game:GetService("RunService") local Mouse = game.Players.LocalPlayer:GetMouse() local LocalPlayer = game.Players.LocalPlayer local Line = Drawing.new("Line") local Circle = Drawing.new("Circle") local Plr = game.Players.LocalPlayer Mouse.KeyDown:Connect(function(KeyPressed) if KeyPressed == (Settings.AimLock.Aimlockkey) then if Settings.AimLock.Enabled == true then Settings.AimLock.Enabled = false if Settings.AimLock.Notifications == true then Plr = FindClosestPlayer() game.StarterGui:SetCore("SendNotification", { Title = "Doggyware V2", Text = "Unlocked" }) end else Plr = FindClosestPlayer() Settings.AimLock.Enabled = true if Settings.AimLock.Notifications == true then game.StarterGui:SetCore("SendNotification", { Title = "Doggyware V2", Text = "Locked On : " .. tostring(Plr.Character.Humanoid.DisplayName) }) end end end end) function FindClosestPlayer() local ClosestDistance, ClosestPlayer = math.huge, nil; for _, Player in next, game:GetService("Players"):GetPlayers() do if Player ~= LocalPlayer then local Character = Player.Character if Character and Character.Humanoid.Health > 1 then local Position, IsVisibleOnViewPort = CurrentCamera:WorldToViewportPoint(Character.HumanoidRootPart .Position) if IsVisibleOnViewPort then local Distance = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(Position.X, Position.Y)).Magnitude if Distance < ClosestDistance then ClosestPlayer = Player ClosestDistance = Distance end end end end end return ClosestPlayer, ClosestDistance end RunService.Heartbeat:connect(function() if Settings.AimLock.Enabled == true then local Vector = CurrentCamera:WorldToViewportPoint(Plr.Character[Settings.AimLock.Aimpart].Position + (Plr.Character[Settings.AimLock.Aimpart].Velocity * Settings.AimLock.Prediction)) Line.Color = Settings.Settings.Color Line.Transparency = Settings.Settings .Transparency Line.Thickness = Settings.Settings .Thickness Line.From = Vector2.new(Mouse.X, Mouse.Y + Inset) Line.To = Vector2.new(Vector.X, Vector.Y) Line.Visible = true Circle.Position = Vector2.new(Mouse.X, Mouse.Y + Inset) Circle.Visible = Settings.Settings.FOV Circle.Thickness = 1.5 Circle.Thickness = 2 Circle.Radius = 60 Circle.Color = Settings.Settings.Color elseif Settings.AimLock.FOV == true then Circle.Visible = true else Circle.Visible = false Line.Visible = false end end) local mt = getrawmetatable(game) local old = mt.__namecall setreadonly(mt, false) mt.__namecall = newcclosure(function(...) local args = {...} if Settings.AimLock.Enabled and getnamecallmethod() == "FireServer" and args[2] == "MousePos" then args[3] = Plr.Character[Settings.AimLock.Aimpart].Position + (Plr.Character[Settings.AimLock.Aimpart].Velocity * Settings.AimLock.Prediction) return old(unpack(args)) end return old(...) end)
+    end
+})
+MySection1:CreateButton({
+    Name = "Desync (t)"; -- required: name of element
+    Callback = function() -- required: function to be called when button is pressed
+	local P1000ToggleKey = "t" -- Change that to whatever keybind: "t"
+ 
+ 
+--[[
+ 
+	Standing still will trick the hitbox, you won't be able to get hit.
+ 
+ 
+	DO NOT EDIT BEYOND THIS POINT IF YOU DON'T UNDERSTAND WHAT IS GOING ON.
+ 
+	ORIGINAL SOURCE PUT INTO SKID FRIENDLY FORMAT TAKE WHAT YOU LIKE AND MAKE MANY MORE OBLIVITIES CLONES WITH THIS OR EVEN YOUR VERY OWN DIY OBLIVITY!
+ 
+	AND REMEMBER TO SAY, SO LOOOOONG OBLIVITYYYYYY!!!
+ 
+ 
+--]]
+ 
+ 
+--// Services
+checkcaller = checkcaller
+newcclosure = newcclosure
+hookmetamethod = hookmetamethod
+ 
+local PastedSources = false
+local BruhXD = game:GetService("RunService")
+local LocalPlayer = game:GetService("Players").LocalPlayer
+local Bullshit = LocalPlayer:GetMouse()
+ 
+ 
+--// Toggles
+Bullshit.KeyDown:Connect(function(SayNoToOblivity)
+	if SayNoToOblivity == string.lower(P1000ToggleKey) then
+		pcall(function()
+			if PastedSources == false then
+				PastedSources = true
+				print("Enabled P1000")
+			elseif PastedSources == true then
+				PastedSources = false
+				print("Disabled P1000")
+			end
+		end)
+	end
+end)
+ 
+Bullshit.KeyDown:Connect(function(SayNoToOblivity)
+	if SayNoToOblivity == ("=") then
+		game:GetService("TeleportService"):Teleport(game.PlaceId, LocalPlayer) 
+	end
+end)
+ 
+ 
+--// Desync_Source
+function RandomNumberRange(a)
+	return math.random(-a * 100, a * 100) / 100
+end
+ 
+function RandomVectorRange(a, b, c)
+	return Vector3.new(RandomNumberRange(a), RandomNumberRange(b), RandomNumberRange(c))
+end
+ 
+ 
+local DesyncTypes = {}
+BruhXD.Heartbeat:Connect(function()
+	if PastedSources == true then
+		DesyncTypes[1] = LocalPlayer.Character.HumanoidRootPart.CFrame
+		DesyncTypes[2] = LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity
+ 
+		local SpoofThis = LocalPlayer.Character.HumanoidRootPart.CFrame
+ 
+		SpoofThis = SpoofThis * CFrame.new(Vector3.new(0, 0, 0))
+		SpoofThis = SpoofThis * CFrame.Angles(math.rad(RandomNumberRange(180)), math.rad(RandomNumberRange(180)), math.rad(RandomNumberRange(180)))
+ 
+		LocalPlayer.Character.HumanoidRootPart.CFrame = SpoofThis
+ 
+		LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(1, 1, 1) * 16384
+ 
+		BruhXD.RenderStepped:Wait()
+ 
+		LocalPlayer.Character.HumanoidRootPart.CFrame = DesyncTypes[1]
+		LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = DesyncTypes[2]
+	end
+end)
+ 
+ 
+--// Hook_CFrame
+local XDDDDDD = nil
+XDDDDDD = hookmetamethod(game, "__index", newcclosure(function(self, key)
+	if PastedSources == true then
+		if not checkcaller() then
+			if key == "CFrame" and PastedSources == true and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and LocalPlayer.Character:FindFirstChild("Humanoid") and LocalPlayer.Character:FindFirstChild("Humanoid").Health > 0 then
+				if self == LocalPlayer.Character.HumanoidRootPart then
+					return DesyncTypes[1] or CFrame.new()
+				elseif self == LocalPlayer.Character.Head then
+					return DesyncTypes[1] and DesyncTypes[1] + Vector3.new(0, LocalPlayer.Character.HumanoidRootPart.Size / 2 + 0.5, 0) or CFrame.new()
+				end
+			end
+		end
+	end
+	return XDDDDDD(self, key)
+end))
+    end
+})
+elseif game.PlaceId == 2788229376 then
+	local Atlas = loadstring(game:HttpGet("https://siegehub.net/Atlas.lua"))()
+
+local UI = Atlas.new({
+    Name = "Doggyware Reborn"; -- script name (required)
+    ConfigFolder = "DW"; -- folder name to save configs to, set this to nil if you want to disable configs saving
+    Credit = "Made By 3qxt#9919"; -- text to appear if player presses the "i" button on their UI (optional)
+    Color = Color3.fromRGB(255,0,0); -- theme color for UI (required)
+    Bind = "V"; -- keybind for toggling the UI, must be a valid KeyCode name
+    -- Atlas Loader:
+    UseLoader = true; -- whether to use Atlas Loader or not, if set to false than CheckKey and Discord are ignored
+    FullName = "Doggyware Reborn"; -- works if UseLoader is set to true, can be same as Name argument, shown on loader frame
+    CheckKey = function(inputtedKey) -- works if UseLoader is set to true, where inputtedKey is the key inputted by the player
+        return inputtedKey=="ugysfbd8f3845435bu3845689"
+    end;
+    Discord = ""; -- works if UseLoader is set to true, will be copied to clipboard if player presses "Copy Invite" button
+})
+UI:Notify({
+  Title = "Checking for whitelist";
+  Content = "Almost there";
+})
+UI:Notify({
+  Title = "Whitelisted";
+  Content = "Welcome, Thanks for buying!";
+})
+local MyPage1 = UI:CreatePage("Main") -- creates a page
+local MySection1 = MyPage1:CreateSection("Main Stuff")
+
+MySection1:CreateButton({
+    Name = "Fly (x)"; -- required: name of element
+    Callback = function() -- required: function to be called when button is pressed
+        local plr = game.Players.LocalPlayer
+local mouse = plr:GetMouse()
+
+localplayer = plr
+
+if workspace:FindFirstChild("Core") then
+workspace.Core:Destroy()
+end
+
+local Core = Instance.new("Part")
+Core.Name = "Core"
+Core.Size = Vector3.new(0.05, 0.05, 0.05)
+
+spawn(function()
+Core.Parent = workspace
+local Weld = Instance.new("Weld", Core)
+Weld.Part0 = Core
+Weld.Part1 = localplayer.Character.LowerTorso
+Weld.C0 = CFrame.new(0, 0, 0)
+end)
+
+workspace:WaitForChild("Core")
+
+local torso = workspace.Core
+flying = true
+local speed=10
+local keys={a=false,d=false,w=false,s=false}
+local e1
+local e2
+local function start()
+local pos = Instance.new("BodyPosition",torso)
+local gyro = Instance.new("BodyGyro",torso)
+pos.Name="EPIXPOS"
+pos.maxForce = Vector3.new(math.huge, math.huge, math.huge)
+pos.position = torso.Position
+gyro.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+gyro.cframe = torso.CFrame
+repeat
+wait()
+localplayer.Character.Humanoid.PlatformStand=true
+local new=gyro.cframe - gyro.cframe.p + pos.position
+if not keys.w and not keys.s and not keys.a and not keys.d then
+speed=5
+end
+if keys.w then
+new = new + workspace.CurrentCamera.CoordinateFrame.lookVector * speed
+speed=speed+0
+end
+if keys.s then
+new = new - workspace.CurrentCamera.CoordinateFrame.lookVector * speed
+speed=speed+0
+end
+if keys.d then
+new = new * CFrame.new(speed,0,0)
+speed=speed+0
+end
+if keys.a then
+new = new * CFrame.new(-speed,0,0)
+speed=speed+0
+end
+if speed>10 then
+speed=5
+end
+pos.position=new.p
+if keys.w then
+gyro.cframe = workspace.CurrentCamera.CoordinateFrame*CFrame.Angles(-math.rad(speed*0),0,0)
+elseif keys.s then
+gyro.cframe = workspace.CurrentCamera.CoordinateFrame*CFrame.Angles(math.rad(speed*0),0,0)
+else
+gyro.cframe = workspace.CurrentCamera.CoordinateFrame
+end
+until flying == false
+if gyro then gyro:Destroy() end
+if pos then pos:Destroy() end
+flying=false
+localplayer.Character.Humanoid.PlatformStand=false
+speed=10
+end
+e1=mouse.KeyDown:connect(function(key)
+if not torso or not torso.Parent then flying=false e1:disconnect() e2:disconnect() return end
+if key=="w" then
+keys.w=true
+elseif key=="s" then
+keys.s=true
+elseif key=="a" then
+keys.a=true
+elseif key=="d" then
+keys.d=true
+elseif key=="x" then
+if flying==true then
+flying=false
+else
+flying=true
+start()
+end
+end
+end)
+e2=mouse.KeyUp:connect(function(key)
+if key=="w" then
+keys.w=false
+elseif key=="s" then
+keys.s=false
+elseif key=="a" then
+keys.a=false
+elseif key=="d" then
+keys.d=false
+end
+end)
+start()
+    end
+})
+MySection1:CreateButton({
+    Name = "Resolver (Resolves mostly everything)"; -- required: name of element
+    Callback = function() -- required: function to be called when button is pressed
+        local RunService = game:GetService("RunService")
+
+local function zeroOutYVelocity(hrp)
+    hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
+    hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
+end
+
+local function onPlayerAdded(player)
+    player.CharacterAdded:Connect(function(character)
+        local hrp = character:WaitForChild("HumanoidRootPart")
+        zeroOutYVelocity(hrp)
+    end)
+end
+
+local function onPlayerRemoving(player)
+    player.CharacterAdded:Disconnect()
+end
+
+game.Players.PlayerAdded:Connect(onPlayerAdded)
+game.Players.PlayerRemoving:Connect(onPlayerRemoving)
+
+RunService.Heartbeat:Connect(function()
+    pcall(function()
+        for i, player in pairs(game.Players:GetChildren()) do
+            if player.Name ~= game.Players.LocalPlayer.Name then
+                local hrp = player.Character.HumanoidRootPart
+                zeroOutYVelocity(hrp)
+            end
+        end
+    end)
+end)
+    end
+})
+MySection1:CreateButton({
+    Name = "Da hood Thusky lock (q)"; -- required: name of element
+    Callback = function() -- required: function to be called when button is pressed
+	_G.KEY = "q"
+		_G.PART = "HumanoidRootPart"
+		_G.PRED = 0.048
+		_G.Frame = Vector3.new(0, 0.53, 0)
+		local L_76_ = game:GetService "Workspace".CurrentCamera
+		local L_77_
+		local L_78_ = false
+		local L_79_ = nil
+		local L_80_ = game.Players.LocalPlayer:GetMouse()
+		local L_81_ = Instance.new("Part", game.Workspace)
+		local L_82_ = Instance.new("Folder", game.CoreGui)
+		function makemarker(L_86_arg0, L_87_arg1, L_88_arg2, L_89_arg3, L_90_arg4)
+			local L_91_ = Instance.new("BillboardGui", L_86_arg0)
+			L_91_.Name = "PP"
+			L_91_.Adornee = L_87_arg1
+			L_91_.Size = UDim2.new(L_89_arg3, L_90_arg4, L_89_arg3, L_90_arg4)
+			L_91_.AlwaysOnTop = true
+			local L_92_ = Instance.new("Frame", L_91_)
+			L_92_.Size = UDim2.new(4, 0, 4, 0)
+			L_92_.BackgroundTransparency = 0.1
+			L_92_.BackgroundColor3 = L_88_arg2
+			local L_93_ = Instance.new("UICorner", L_92_)
+			L_93_.CornerRadius = UDim.new(50, 50)
+			return L_91_
+		end
+		local L_83_ = game.Players:GetPlayers()
+		function noob(L_94_arg0)
+			local L_95_
+			repeat
+				wait()
+			until L_94_arg0.Character
+			local L_96_ = makemarker(L_82_, L_94_arg0.Character:WaitForChild(_G.PART), Color3.fromRGB(255, 255, 255), 0.0, 0)
+			L_96_.Name = L_94_arg0.Name
+			L_94_arg0.CharacterAdded:connect(
+				function(L_98_arg0)
+					L_96_.Adornee = L_98_arg0:WaitForChild(_G.PART)
+				end
+			)
+			local L_97_ = Instance.new("TextLabel", L_96_)
+			L_97_.BackgroundTransparency = 1
+			L_97_.Position = UDim2.new(0, 0, 0, -50)
+			L_97_.Size = UDim2.new(0, 100, 0, 100)
+			L_97_.Font = Enum.Font.SourceSansSemibold
+			L_97_.TextSize = 14
+			L_97_.TextColor3 = Color3.new(1, 1, 1)
+			L_97_.TextStrokeTransparency = 0
+			L_97_.TextYAlignment = Enum.TextYAlignment.Bottom
+			L_97_.Text = "Bling" .. L_94_arg0.Name
+			L_97_.ZIndex = 10
+			spawn(
+				function()
+					while wait() do
+						if L_94_arg0.Character then
+						end
+					end
+				end
+			)
+		end
+		for L_99_forvar0 = 1, #L_83_ do
+			if L_83_[L_99_forvar0] ~= game.Players.LocalPlayer then
+				noob(L_83_[L_99_forvar0])
+			end
+		end
+		game.Players.PlayerAdded:connect(
+			function(L_100_arg0)
+				noob(L_100_arg0)
+			end
+		)
+		game.Players.PlayerRemoving:Connect(
+			function(L_101_arg0)
+				L_82_[L_101_arg0.Name]:Destroy()
+			end
+		)
+		spawn(
+			function()
+				L_81_.Anchored = true
+				L_81_.CanCollide = false
+				L_81_.Size = Vector3.new(0.1, 0.1, 0.1)
+				L_81_.Transparency = 0.1
+				makemarker(L_81_, L_81_, Color3.fromRGB(0, 180, 0), 0.20, 0)
+			end
+		)
+		L_80_.KeyDown:Connect(
+			function(L_102_arg0)
+				if L_102_arg0 ~= _G.KEY then
+					return
+				end
+				if L_78_ then
+					L_78_ = false
+					TextLabel.TextColor3 = Color3.fromRGB(255, 20, 75)
+					TextLabel.Text = "------"
+				else
+					L_78_ = true
+					L_77_ = getClosestPlayerToCursor()
+					TextLabel.TextColor3 = Color3.fromRGB(12, 255, 0)
+					TextLabel.Text = L_77_.Character.Humanoid.DisplayName
+				end
+			end
+		)
+		function getClosestPlayerToCursor()
+			local L_103_
+			local L_104_ = math.huge
+			for L_105_forvar0, L_106_forvar1 in pairs(game.Players:GetPlayers()) do
+				if
+					L_106_forvar1 ~= game.Players.LocalPlayer and L_106_forvar1.Character and L_106_forvar1.Character:FindFirstChild("Humanoid") and
+					L_106_forvar1.Character.Humanoid.Health ~= 0 and
+					L_106_forvar1.Character:FindFirstChild(_G.PART)
+				then
+					local L_107_ = L_76_:WorldToViewportPoint(L_106_forvar1.Character.PrimaryPart.Position)
+					local L_108_ = (Vector2.new(L_107_.X, L_107_.Y) - Vector2.new(L_80_.X, L_80_.Y)).magnitude
+					if L_108_ < L_104_ then
+						L_103_ = L_106_forvar1
+						L_104_ = L_108_
+					end
+				end
+			end
+			return L_103_
+		end
+		game:GetService "RunService".Stepped:connect(
+			function()
+				if L_78_ and L_77_.Character and L_77_.Character:FindFirstChild(_G.PART) then
+					L_81_.CFrame =
+						CFrame.new(L_77_.Character[_G.PART].Position + _G.Frame + L_77_.Character[_G.PART].Velocity * L_79_)
+				else
+					L_81_.CFrame = CFrame.new(0, 9999, 0)
+				end
+			end
+		)
+		local L_84_ = getrawmetatable(game)
+		local L_85_ = L_84_.__namecall
+		setreadonly(L_84_, false)
+		L_84_.__namecall =
+			newcclosure(
+				function(...)
+				local L_109_ = {
+					...
+				}
+				if L_78_ and getnamecallmethod() == "FireServer" and L_109_[2] == "UpdateMousePos" then
+					L_109_[3] = L_77_.Character[_G.PART].Position + _G.Frame + L_77_.Character[_G.PART].Velocity * L_79_
+					return L_85_(unpack(L_109_))
+				end
+				return L_85_(...)
+			end
+			)
+		game.Players.LocalPlayer.Chatted:Connect(
+			function(L_110_arg0)
+				if L_110_arg0 == "/e print" then
+					print(_G.PRED)
+				end
+			end
+		)
+		game.Players.LocalPlayer.Chatted:Connect(
+			function(L_111_arg0)
+				if L_111_arg0 == "Code:1029" then
+					_G.KEY = nil
+					_G.AIR = nil
+					_G.PART = nil
+					_G.PRED = nil
+					TextLabel.Visible = false
+				end
+			end
+		)
+		game.Players.LocalPlayer.Chatted:Connect(
+			function(L_112_arg0)
+				if L_112_arg0 == "/e hrp" then
+					_G.KEY = "q"
+					_G.AIR = 0.00005
+					_G.PART = "HumanoidRootPart"
+					_G.PRED = 0.032
+					TextLabel.Visible = true
+				end
+			end
+		)
+		game.Players.LocalPlayer.Chatted:Connect(
+			function(L_113_arg0)
+				if L_113_arg0 == "/e lt" then
+					_G.KEY = "q"
+					_G.AIR = 0.00005
+					_G.PART = "LowerTorso"
+					_G.PRED = 0.032
+					TextLabel.Visible = true
+				end
+			end
+		)
+		game.Players.LocalPlayer.Chatted:Connect(
+			function(L_114_arg0)
+				if L_114_arg0 == "Screensharing" then
+					_G.KEY = "q"
+					_G.AIR = 0.00005
+					_G.PART = "LowerTorso"
+					_G.PRED = 0.033
+					TextLabel.Visible = true
+					L_81_ = nil
+				end
+			end
+		)
+		game.Players.LocalPlayer.Chatted:Connect(
+			function(L_115_arg0)
+				if L_115_arg0 == "/e P+" then
+					_G.PRED = _G.PRED + 0.001
+				end
+			end
+		)
+		game.Players.LocalPlayer.Chatted:Connect(
+			function(L_116_arg0)
+				if L_116_arg0 == "/e P-" then
+					_G.PRED = _G.PRED - 0.001
+				end
+			end
+		)
+		while wait() do
+			if
+				getClosestPlayerToCursor().Character.Humanoid.Jump == true and
+				getClosestPlayerToCursor().Character.Humanoid.FloorMaterial == Enum.Material.Air
+			then
+				_G.Frame = Vector3.new(0, -2.3, 0)
+				wait(0.05)
+			else
+				local L_117_ = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+				local L_118_ = tostring(L_117_)
+				local L_119_ = L_118_:split(" ")
+				local L_120_ = L_119_[1]
+				L_79_ = L_120_ / 1000 + _G.PRED
+				_G.Frame = Vector3.new(0, 0.53, 0)
+			end
+		end
+    end
+})
+MySection1:CreateButton({
+    Name = "Desync (t)"; -- required: name of element
+    Callback = function() -- required: function to be called when button is pressed
+	local P1000ToggleKey = "t" -- Change that to whatever keybind: "t"
+ 
+ 
+--[[
+ 
+	Standing still will trick the hitbox, you won't be able to get hit.
+ 
+ 
+	DO NOT EDIT BEYOND THIS POINT IF YOU DON'T UNDERSTAND WHAT IS GOING ON.
+ 
+	ORIGINAL SOURCE PUT INTO SKID FRIENDLY FORMAT TAKE WHAT YOU LIKE AND MAKE MANY MORE OBLIVITIES CLONES WITH THIS OR EVEN YOUR VERY OWN DIY OBLIVITY!
+ 
+	AND REMEMBER TO SAY, SO LOOOOONG OBLIVITYYYYYY!!!
+ 
+ 
+--]]
+ 
+ 
+--// Services
+checkcaller = checkcaller
+newcclosure = newcclosure
+hookmetamethod = hookmetamethod
+ 
+local PastedSources = false
+local BruhXD = game:GetService("RunService")
+local LocalPlayer = game:GetService("Players").LocalPlayer
+local Bullshit = LocalPlayer:GetMouse()
+ 
+ 
+--// Toggles
+Bullshit.KeyDown:Connect(function(SayNoToOblivity)
+	if SayNoToOblivity == string.lower(P1000ToggleKey) then
+		pcall(function()
+			if PastedSources == false then
+				PastedSources = true
+				print("Enabled P1000")
+			elseif PastedSources == true then
+				PastedSources = false
+				print("Disabled P1000")
+			end
+		end)
+	end
+end)
+ 
+Bullshit.KeyDown:Connect(function(SayNoToOblivity)
+	if SayNoToOblivity == ("=") then
+		game:GetService("TeleportService"):Teleport(game.PlaceId, LocalPlayer) 
+	end
+end)
+ 
+ 
+--// Desync_Source
+function RandomNumberRange(a)
+	return math.random(-a * 100, a * 100) / 100
+end
+ 
+function RandomVectorRange(a, b, c)
+	return Vector3.new(RandomNumberRange(a), RandomNumberRange(b), RandomNumberRange(c))
+end
+ 
+ 
+local DesyncTypes = {}
+BruhXD.Heartbeat:Connect(function()
+	if PastedSources == true then
+		DesyncTypes[1] = LocalPlayer.Character.HumanoidRootPart.CFrame
+		DesyncTypes[2] = LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity
+ 
+		local SpoofThis = LocalPlayer.Character.HumanoidRootPart.CFrame
+ 
+		SpoofThis = SpoofThis * CFrame.new(Vector3.new(0, 0, 0))
+		SpoofThis = SpoofThis * CFrame.Angles(math.rad(RandomNumberRange(180)), math.rad(RandomNumberRange(180)), math.rad(RandomNumberRange(180)))
+ 
+		LocalPlayer.Character.HumanoidRootPart.CFrame = SpoofThis
+ 
+		LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(1, 1, 1) * 16384
+ 
+		BruhXD.RenderStepped:Wait()
+ 
+		LocalPlayer.Character.HumanoidRootPart.CFrame = DesyncTypes[1]
+		LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = DesyncTypes[2]
+	end
+end)
+ 
+ 
+--// Hook_CFrame
+local XDDDDDD = nil
+XDDDDDD = hookmetamethod(game, "__index", newcclosure(function(self, key)
+	if PastedSources == true then
+		if not checkcaller() then
+			if key == "CFrame" and PastedSources == true and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and LocalPlayer.Character:FindFirstChild("Humanoid") and LocalPlayer.Character:FindFirstChild("Humanoid").Health > 0 then
+				if self == LocalPlayer.Character.HumanoidRootPart then
+					return DesyncTypes[1] or CFrame.new()
+				elseif self == LocalPlayer.Character.Head then
+					return DesyncTypes[1] and DesyncTypes[1] + Vector3.new(0, LocalPlayer.Character.HumanoidRootPart.Size / 2 + 0.5, 0) or CFrame.new()
+				end
+			end
+		end
+	end
+	return XDDDDDD(self, key)
+end))
+    end
+})
+end
