@@ -468,13 +468,13 @@ end)
     end
 })
 MySection1:CreateButton({
-    Name = "Da hood Thusky lock (q)"; -- required: name of element
+    Name = "Lock (Auto Pred to 130 ping) (q)"; -- required: name of element
     Callback = function() -- required: function to be called when button is pressed
 	-- Toggle
 getgenv().Target = true
 
 -- Configuration
-getgenv().Key = Enum.KeyCode.E
+getgenv().Key = Enum.KeyCode.Q
 getgenv().Prediction = 0.178
 getgenv().ChatMode = false
 getgenv().NotifMode = true
