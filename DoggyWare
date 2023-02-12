@@ -4,7 +4,7 @@ if game.PlaceId == 5602055394 then
 local Atlas = loadstring(game:HttpGet("https://siegehub.net/Atlas.lua"))()
 
 local UI = Atlas.new({
-    Name = "Doggyware Reborn"; -- script name (required)
+    Name = "Doggyware Reborn V2"; -- script name (required)
     ConfigFolder = "DW"; -- folder name to save configs to, set this to nil if you want to disable configs saving
     Credit = "Made By 3qxt#9919"; -- text to appear if player presses the "i" button on their UI (optional)
     Color = Color3.fromRGB(225,186,239); -- theme color for UI (required)
@@ -293,7 +293,7 @@ elseif game.PlaceId == 2788229376 then
 	local Atlas = loadstring(game:HttpGet("https://siegehub.net/Atlas.lua"))()
 
 local UI = Atlas.new({
-    Name = "Doggyware Reborn"; -- script name (required)
+    Name = "Doggyware Reborn V2"; -- script name (required)
     ConfigFolder = "DW"; -- folder name to save configs to, set this to nil if you want to disable configs saving
     Credit = "Made By 3qxt#9919"; -- text to appear if player presses the "i" button on their UI (optional)
     Color = Color3.fromRGB(255,0,0); -- theme color for UI (required)
